@@ -1,41 +1,31 @@
+import { useTranscation } from "@/hooks/useTransactions";
 import { useAuth, useUser } from "@clerk/clerk-expo";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useEffect } from "react";
+import { Pressable, Text, View } from "react-native";
 
 export default function Page() {
   const { user } = useUser();
   const { signOut } = useAuth();
 
+const {transaction, summary, isLoading, loadData, deleteTranscation } = useTranscation (user.id) 
+
+useEffect(() =>{
+  loadData()
+
+}, [loadData])
+console.log(user.id)
+
+console.log("transaction", transaction)
+console.log("Summary", summary)
+
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome!</Text>
+    <View>
+      <Text>Welcome!</Text>
       <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
-      <Pressable style={styles.button} onPress={() => signOut()}>
-        <Text style={styles.buttonText}>Sign out</Text>
+      <Pressable onPress={() => signOut()}>
+        <Text>Sign out</Text>
       </Pressable>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    paddingTop: 60,
-    gap: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  button: {
-    backgroundColor: "#0a7ea4",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
-});
